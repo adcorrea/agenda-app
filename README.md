@@ -31,6 +31,10 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 Site do Angular Material <https://material.angular.io/>
 
+Site do M3 Material <https://m3.material.io/get-started>
+
+Lista de icones <https://fonts.google.com/icons?selected=Material+Icons:home:>
+
 
 ## Comandos
 
