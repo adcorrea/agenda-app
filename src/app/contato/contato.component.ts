@@ -12,6 +12,7 @@ export class ContatoComponent implements OnInit {
 
   formulario: FormGroup;
   contatos: Contato[] = [];
+  colunas = ['id', 'nome', 'email', 'favorito'];
 
   constructor(private service: ContatoService,
     private fb: FormBuilder){
@@ -22,6 +23,10 @@ export class ContatoComponent implements OnInit {
       this.formulario = this.fb.group({
         nome: ['', Validators.required],
         email: ['', [Validators.email, Validators.required]]
+      });
+
+      this.service.getAll().subscribe( response =>{
+        this.contatos = response;
       })
   }
 
