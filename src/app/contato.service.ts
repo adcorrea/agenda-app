@@ -21,7 +21,11 @@ export class ContatoService {
     return this.http.post<Contato>(this.url, contato);
   }
 
-  getAll():Observable<Contato[]>{
+  list():Observable<Contato[]>{
     return this.http.get<Contato[]>(this.url);
+  }
+
+  toFavorite(contato: Contato):Observable<any>{
+    return this.http.patch(`${this.url}/${contato.id}/favorito`, null);
   }
 }
