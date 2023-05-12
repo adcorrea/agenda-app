@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Contato } from './contato/contato';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from 'src/environments/environment.prod';
+import { Form } from '@angular/forms';
 
 
 
@@ -27,5 +28,9 @@ export class ContatoService {
 
   toFavorite(contato: Contato):Observable<any>{
     return this.http.patch(`${this.url}/${contato.id}/favorito`, null);
+  }
+
+  upload(contato: Contato, formData: FormData): Observable<any>{
+    return this.http.patch<any>(`${this.url}/${contato.id}/foto`, formData);
   }
 }
