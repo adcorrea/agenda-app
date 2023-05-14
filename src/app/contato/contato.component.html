@@ -19,6 +19,7 @@
             <div *ngIf="contato.foto">
                 <img width="50"
                       height="50"
+                      (click)="visualizarContato(contato)"
                       src="data:image/png;base64,{{ contato.foto }}" />
             </div>
             <div *ngIf="!contato.foto">
