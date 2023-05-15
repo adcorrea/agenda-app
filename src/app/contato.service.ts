@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Contato } from './contato/contato';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from 'src/environments/environment.prod';
 import { Form } from '@angular/forms';
+import { PaginaContato } from './contato/paginaContato';
 
 
 
@@ -22,8 +23,12 @@ export class ContatoService {
     return this.http.post<Contato>(this.url, contato);
   }
 
-  list():Observable<Contato[]>{
-    return this.http.get<Contato[]>(this.url);
+  list(page: number, size: number):Observable<PaginaContato>{
+    const params = new HttpParams()
+                          .set('page', page)
+                          .set('size', size);
+
+    return this.http.get<PaginaContato>(`${this.url}?${params.toString()}`);
   }
 
   toFavorite(contato: Contato):Observable<any>{

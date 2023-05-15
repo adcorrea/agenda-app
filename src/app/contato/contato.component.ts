@@ -4,6 +4,8 @@ import { Contato } from './contato';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog'
 import { ContatoDetalheComponent } from '../contato-detalhe/contato-detalhe.component';
+import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-contato',
@@ -16,20 +18,28 @@ export class ContatoComponent implements OnInit {
   contatos: Contato[] = [];
   colunas = ['foto','id', 'nome', 'email', 'favorito'];
 
+  totalElementos = 0;
+  pagina = 0;
+  tamanho = 10;
+  pageSizeOptions: number[] = [10];
+
   constructor(private service: ContatoService,
     private fb: FormBuilder,
-    private dialog: MatDialog){
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar){
 
   }
 
   ngOnInit(): void {
-     this.listar();
+     this.listar(this.pagina, this.tamanho);
      this.montarFormulario();
   }
 
-  listar():void{
-    this.service.list().subscribe( response =>{
-      this.contatos = response;
+  listar(pagina: number = 0, tamanho: number = 10):void{
+    this.service.list(pagina, tamanho).subscribe( response =>{
+      this.contatos = response.content;
+      this.pagina = response.number;
+      this.totalElementos = response.totalElements;
     })
   }
 
@@ -54,9 +64,15 @@ export class ContatoComponent implements OnInit {
     let contato: Contato = new Contato(formValues.nome, formValues.email)
     this.service.save(contato)
     .subscribe(response =>{
-      let lista: Contato[] = [...this.contatos, response];
-      this.contatos = lista;
-    })
+      this.listar();
+      this.snackBar.open('O contato foi adicionado!', 'Sucesso',{
+        duration: 2000
+      });
+    });
+
+
+
+
   }
 
 
@@ -67,8 +83,14 @@ export class ContatoComponent implements OnInit {
       const formData: FormData = new FormData();
       formData.append("foto", foto);
       this.service.upload(contato, formData)
-        .subscribe( response => this.listar());
+        .subscribe( response => this.listar(this.pagina, this.tamanho));
     }
+  }
+
+  paginar(event: PageEvent){
+    this.pagina = event.pageIndex;
+    this.listar(this.pagina, this.tamanho);
+
   }
 
 
